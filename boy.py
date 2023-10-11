@@ -31,7 +31,6 @@ class Idle:
         if get_time() - boy.idle_start_time > 3 :
             boy.state_machine.handle_event(('TIME_OUT',0))
             pass
-        print("Idle doing")
         pass
 
     @staticmethod
@@ -53,10 +52,10 @@ class Idle:
 class AutoRun:
     @staticmethod
     def enter(boy,e):
-        if boy.action == 0:
-            boy.action =2
-        elif boy.action == 1:
-            boy.action =3
+        if boy.action == 2:
+            boy.dir = -1
+        elif boy.action == 3:
+            boy.dir = 1
         boy.auto_run_start_time = get_time()
 
     @staticmethod
@@ -64,6 +63,13 @@ class AutoRun:
         boy.frame = (boy.frame + 1) % 8
         if get_time() - boy.auto_run_start_time > 5 :
             boy.state_machine.handle_event(('TIME_OUT',0))
+
+        if boy.x -30 < 0 : boy.dir = -1 # 왼쪽 이동
+        elif boy.x > 800 : boy.dir = 1  # 오른쪽 이동
+
+        boy.x += boy.dir * 5
+        print("AutoRun doing")
+
 
     @staticmethod
     def exit(boy,e):
