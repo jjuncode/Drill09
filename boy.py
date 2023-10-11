@@ -54,8 +54,10 @@ class AutoRun:
     def enter(boy,e):
         if boy.action == 2:
             boy.dir = -1
+            boy.action = 0
         elif boy.action == 3:
             boy.dir = 1
+            boy.action = 1
         boy.auto_run_start_time = get_time()
 
     @staticmethod
@@ -64,10 +66,15 @@ class AutoRun:
         if get_time() - boy.auto_run_start_time > 5 :
             boy.state_machine.handle_event(('TIME_OUT',0))
 
-        if boy.x -30 < 0 : boy.dir = -1 # 왼쪽 이동
-        elif boy.x > 800 : boy.dir = 1  # 오른쪽 이동
+        if boy.x -55 < 0 :
+            boy.dir = 1 # 오른쪽 이동 전환
+            boy.action = 1
 
-        boy.x += boy.dir * 5
+        elif boy.x > 800-55 :
+            boy.dir = -1  # 왼쪽 이동 전환
+            boy.action = 0
+
+        boy.x += boy.dir * 30
         print("AutoRun doing")
 
 
