@@ -1,4 +1,5 @@
-from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time,SDLK_RIGHT, SDL_KEYUP,SDLK_LEFT
+import pico2d
+from pico2d import load_image, SDL_KEYDOWN, SDLK_SPACE, get_time,SDLK_RIGHT, SDL_KEYUP,SDLK_LEFT, SDLK_a
 import math
 
 # define event check functions
@@ -20,6 +21,8 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
+def keydown_a(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 class Idle:
     @staticmethod
@@ -68,7 +71,7 @@ class AutoRun:
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame*100,boy.action*100,100,100,boy.x,boy.y)
+        boy.image.clip_draw(boy.frame*100,boy.action*100,200,200,boy.x,boy.y)
 
 class Run:
     @staticmethod
@@ -121,8 +124,10 @@ class StateMachine:
         self.boy = boy
         self.transitions ={
             Sleep:{right_down : Run, left_down: Run, right_up:Run, left_up:Run, space_down:Idle},
-            Idle:{right_down : Run, left_down : Run, left_up:Run, time_out:Sleep},
-            Run:{right_down:Idle,left_down:Idle,right_up:Idle,left_up:Idle}
+            Idle:{right_down : Run, left_down : Run, left_up:Run, time_out:Sleep, keydown_a:AutoRun},
+            Run:{right_down:Idle,left_down:Idle,right_up:Idle,left_up:Idle},
+            AutoRun:{time_out:Idle}
+
         }
         pass
 
